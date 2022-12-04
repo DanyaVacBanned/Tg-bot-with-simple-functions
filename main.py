@@ -45,10 +45,10 @@ async def sub_handle_func(message: types.Message, state=FSMContext):
         else:
             await bot.send_message(message.chat.id, 'Вы уже подписанны на рассылку', reply_markup=nav.main_keyboard_with_sub)
     elif message.text == 'Нет':
-        await bot.send_message(message.chat.id,'А нахуя тогда команду вводил, идиот блять?', reply_markup=nav.main_keyboard)
+        await bot.send_message(message.chat.id,'Вы не подписались на сервис.', reply_markup=nav.main_keyboard)
         await state.finish()
     else:
-        await bot.send_message(message.chat.id,'Братан, я ж для тебя клавиатуру даже вывел. Ну вот что за хуйней ты страдаешь?', reply_markup=nav.sub_keyboard)
+        await bot.send_message(message.chat.id,'Некорректный ввод', reply_markup=nav.sub_keyboard)
 
 
 @dp.message_handler(text='-Отписаться от рассылки-', state=None)
@@ -63,14 +63,14 @@ async def unsub_handle(message:types.Message, state=FSMContext):
             await bot.send_message(message.chat.id, 'Вы успешно отписались от рассылки', reply_markup=nav.main_keyboard)
             await state.finish()
         else:
-            await bot.send_message(message.chat.id, 'От какой рассылки? Ты не подписан даже', reply_markup=nav.main_keyboard)
+            await bot.send_message(message.chat.id, 'Вы не подписанны на рассылку', reply_markup=nav.main_keyboard)
             await state.finish()
 
     elif message.text == 'Нет':
         await state.finish()
-        await bot.send_message(message.chat.id, 'Ну ты нерешительный пиздец',reply_markup=nav.main_keyboard_with_sub)
+        await bot.send_message(message.chat.id, 'Вы всё еще подписанны',reply_markup=nav.main_keyboard_with_sub)
     else:
-        await bot.send_message(message.chat.id, 'Ты долбоеб?')
+        await bot.send_message(message.chat.id, 'Некорректный ввод')
 
 @dp.message_handler(text='-Прислать 3 картинки по запросу-', state=None)
 async def pic_request(message: types.Message):
@@ -97,9 +97,9 @@ async def pic_request_handle(message:types.Message, state=FSMContext):
 async def send_all(message:types.Message):
     if message.from_user.id == int(admin_id):
         await Sendall.mailing.set()
-        await bot.send_message(message.from_user.id, 'Ебашь')
+        await bot.send_message(message.from_user.id, 'Ввод')
     else:
-        await bot.send_message(message.from_user.id, 'Этот дом запривачен гнида')
+        await bot.send_message(message.from_user.id, 'Вы не являетесь администратором')
 @dp.message_handler(state=Sendall.mailing)
 async def send_all_handler(message: types.Message, state=FSMContext):
     for i in db.select_all_users():
